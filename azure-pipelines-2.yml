@@ -34,26 +34,26 @@ steps:
 
 
 - script: |
-    databricks workspace import $BUILD_SOURCESDIRECTORY/"notebooks/Users/wipadac@microsoft.com/ML/deploy/deploy_azure_ml_model.py" "/Demo/Test/deploy_azure_ml_model"  --language PYTHON -o
+    databricks workspace import $BUILD_SOURCESDIRECTORY/"notebooks/Users/wipadac@microsoft.com/ML/deploy/deploy_azure_ml_model.py" "/MLOps/deploy_azure_ml_model"  --language PYTHON -o
   displayName: 'Import ML Deploy Notebook'
 - task: PythonScript@0
   inputs:
     scriptSource: 'filePath'
     scriptPath: '$(Build.Repository.LocalPath)/cicd-scripts/executenotebook.py'
-    arguments: '--shard $(DATABRICKS_HOST) --token $(DATABRICKS_TOKEN) --cluster $(EXISTING_CLUSTER_ID) --localpath $(Build.Repository.LocalPath)/notebooks/Users/wipadac@microsoft.com/ML/deploy --workspacepath /Demo/Test --outfilepath /home/vsts/work/1/s/notebooks/Users/oliver.koernig@databricks.com --params model_name=$(model_name)'
+    arguments: '--shard $(DATABRICKS_HOST) --token $(DATABRICKS_TOKEN) --cluster $(EXISTING_CLUSTER_ID) --localpath $(Build.Repository.LocalPath)/notebooks/Users/wipadac@microsoft.com/ML/deploy --workspacepath /MLOps --outfilepath /home/vsts/work/1/s/notebooks/Users/wipadac@microsoft.com --params model_name=$(model_name)'
   displayName: 'Deploy mlFlow Model from Registry to Azure ML for Testing'
   
 - script: |
     echo $(response)
   displayName: 'API URL'
 - script: |
-    databricks workspace import $BUILD_SOURCESDIRECTORY/"notebooks/Users/wipadac@microsoft.com/ML/test/test_api.py" "/Demo/Test/test_api"  --language PYTHON -o
+    databricks workspace import $BUILD_SOURCESDIRECTORY/"notebooks/Users/wipadac@microsoft.com/ML/test/test_api.py" "/MLOps/test_api"  --language PYTHON -o
   displayName: 'Import ML Test Notebook'
 - task: PythonScript@0
   inputs:
     scriptSource: 'filePath'
     scriptPath: '$(Build.Repository.LocalPath)/cicd-scripts/executenotebook.py'
-    arguments: '--shard $(DATABRICKS_HOST) --token $(DATABRICKS_TOKEN) --cluster $(EXISTING_CLUSTER_ID) --localpath $(Build.Repository.LocalPath)/notebooks/Users/wipadac@microsoft.com/ML/test --workspacepath /Demo/Test --outfilepath /home/vsts/work/1/s/notebooks/Users/oliver.koernig@databricks.com --params model_name=$(model_name),scoring_uri=$(response)'
+    arguments: '--shard $(DATABRICKS_HOST) --token $(DATABRICKS_TOKEN) --cluster $(EXISTING_CLUSTER_ID) --localpath $(Build.Repository.LocalPath)/notebooks/Users/wipadac@microsoft.com/ML/test --workspacepath /MLOps --outfilepath /home/vsts/work/1/s/notebooks/Users/wipadac@microsoft.com --params model_name=$(model_name),scoring_uri=$(response)'
   displayName: 'Test mlFlow Model from Registry against REST API' 
 
 - task: PythonScript@0
@@ -71,5 +71,5 @@ steps:
   inputs:
     scriptSource: 'filePath'
     scriptPath: '$(Build.Repository.LocalPath)/cicd-scripts/executenotebook.py'
-    arguments: '--shard $(DATABRICKS_HOST) --token $(DATABRICKS_TOKEN) --cluster $(EXISTING_CLUSTER_ID) --localpath $(Build.Repository.LocalPath)/notebooks/Users/wipadac@microsoft.com/ML/deploy --workspacepath /Demo/Test --outfilepath /home/vsts/work/1/s/notebooks/Users/oliver.koernig@databricks.com --params model_name=$(model_name),stage="production",phase="prod"'
+    arguments: '--shard $(DATABRICKS_HOST) --token $(DATABRICKS_TOKEN) --cluster $(EXISTING_CLUSTER_ID) --localpath $(Build.Repository.LocalPath)/notebooks/Users/wipadac@microsoft.com/ML/deploy --workspacepath /MLOps --outfilepath /home/vsts/work/1/s/notebooks/Users/wipadac@microsoft.com --params model_name=$(model_name),stage="production",phase="prod"'
   displayName: 'Deploy mlFlow Model from Registry to Azure ML into Production'
