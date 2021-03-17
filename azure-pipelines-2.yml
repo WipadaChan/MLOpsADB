@@ -17,7 +17,7 @@ steps:
     pip install pytest requests setuptools wheel
     pip install -U databricks-cli
     echo $(DATABRICKS_HOST)
-    $DATABRICKS_TOKEN | databricks configure --token
+    $(DATABRICKS_HOST) $(DATABRICKS_TOKEN) | databricks configure --token
     databricks workspace ls
   displayName: 'Load Python Dependencies'
 
