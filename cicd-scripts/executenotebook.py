@@ -61,6 +61,7 @@ def main():
             if file_extension.lower() in ['.scala', '.sql', '.r', '.py']:
                 row = [fullpath, fullworkspacepath, 1]
                 notebooks.append(row)
+    print('Notebooks to process: '+str(notebooks))            
     print('Number of Notebooks to process: '+str(len(notebooks)))
     # run each element in array
     for notebook in notebooks:
