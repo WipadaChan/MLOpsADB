@@ -16,8 +16,8 @@ steps:
 - script: |
     pip install pytest requests setuptools wheel
     pip install -U databricks-cli
-    databricks configure
-    dbfs ls
+    databricks configure -f '$(Build.Repository.LocalPath)/confg/db_confg' --host $(DATABRICKS_HOST)
+    databricks workspace ls
   displayName: 'Load Python Dependencies'
 
 - checkout: self
