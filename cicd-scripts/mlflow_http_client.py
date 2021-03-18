@@ -20,15 +20,12 @@ class HttpClient(object):
         :param resource: Relative path name of resource such as cluster/list
         """
         uri = self._mk_uri(resource)
-        head = self._mk_headers()
-        #rsp = requests.get(uri, headers=self._mk_headers())
-        #self._check_response(rsp, uri)
-        return  uri, head 
+        rsp = requests.get(uri, headers=self._mk_headers())
+        self._check_response(rsp, uri)
+        return rsp
 
     def get(self, resource):
-        #json.loads(self._get(resource).text)
-        return (self._get(resource))
-        
+        return json.loads(self._get(resource).text)
 
     def post(self, resource, data):
         """ Executes an HTTP POST call
@@ -42,10 +39,7 @@ class HttpClient(object):
         return json.loads(rsp.text)
 
     def _mk_headers(self):
-        token = get_token()
-        header = {"Authorization": "Bearer {}".format(token)}
-        return header
-        
+        return {} if self.token is None else { "Authorization": f"Bearer {self.token}" }
 
     def _mk_uri(self, resource):
         return f"{self.api_uri}/{resource}"
