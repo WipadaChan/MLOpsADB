@@ -20,6 +20,8 @@ class HttpClient(object):
         :param resource: Relative path name of resource such as cluster/list
         """
         uri = self._mk_uri(resource)
+        print(self._mk_headers())
+        print(uri)
         rsp = requests.get(uri, headers=self._mk_headers())
         self._check_response(rsp, uri)
         return rsp
@@ -39,7 +41,7 @@ class HttpClient(object):
         return json.loads(rsp.text)
 
     def _mk_headers(self):
-        header = {'Authorization': 'Bearer {}'.format(self.token)}
+        header = {"Authorization": "Bearer {}".format(self.token)}
         return {} if self.token is None else header
         
 
