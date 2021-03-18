@@ -11,7 +11,7 @@
 
 # COMMAND ----------
 
-dbutils.widgets.text(name = "model_name", defaultValue = "wine-model-ok", label = "Model Name")
+dbutils.widgets.text(name = "model_name", defaultValue = "tech-summit-wine-model", label = "Model Name")
 dbutils.widgets.text(name = "stage", defaultValue = "staging", label = "Stage")
 dbutils.widgets.text(name = "phase", defaultValue = "qa", label = "Phase")
 
