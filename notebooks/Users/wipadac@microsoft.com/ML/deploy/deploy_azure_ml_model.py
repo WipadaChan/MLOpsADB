@@ -120,6 +120,15 @@ print(phase)
 
 import mlflow.azureml
 
+ml_name = model_name+"-"+stage
+img_name = model_name+"-"+phase+"-image"
+
+if len(ml_name)>32:
+  ml_name=ml_name[0:32]
+
+if len(img_name)>32:
+  img_name=img_name[0:32]
+
 model_image, azure_model = mlflow.azureml.build_image(model_uri=model_uri, 
                                                       workspace=workspace, 
                                                       model_name=model_name+"-"+stage,
