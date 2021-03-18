@@ -27,7 +27,7 @@ class HttpClient(object):
 
     def get(self, resource):
         #json.loads(self._get(resource).text)
-        return (print(self._get(resource)))
+        return (self._get(resource))
         
 
     def post(self, resource, data):
