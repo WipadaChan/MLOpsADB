@@ -2,12 +2,17 @@
 import importlib,pprint,json,os
 from  mlflow_http_client import MlflowHttpClient, get_host,get_token
 
-client = MlflowHttpClient(host=get_host(),token=get_token())
-pp = pprint.PrettyPrinter(indent=4)
-model_name=os.environ.get('MODEL_NAME')
+#client = MlflowHttpClient(host=get_host(),token=get_token())
+#pp = pprint.PrettyPrinter(indent=4)
+#model_name=os.environ.get('MODEL_NAME')
 print("Mode Name is: "+model_name)
-rsp = client.get("registered-models/get-latest-versions?name="+model_name+"&stages=staging")
-print(rsp)
+host=get_host()
+token=get_token()
+print("host Name is: "+host)
+print("token Name is: "+token)
+
+#rsp = client.get("registered-models/get-latest-versions?name="+model_name+"&stages=staging")
+#print(rsp)
 #if len(rsp) >= 1:
 #    version = rsp['model_versions'][0]['version']
 #else:
