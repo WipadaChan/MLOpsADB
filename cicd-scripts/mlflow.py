@@ -3,6 +3,7 @@ import importlib,pprint,json,os
 from  mlflow_http_client import MlflowHttpClient, get_host,get_token
 
 client = MlflowHttpClient(host=get_host(),token=get_token())
+print("Token: "+get_token())
 pp = pprint.PrettyPrinter(indent=4)
 model_name=os.environ.get('MODEL_NAME')
 print("Mode Name is: "+model_name)
