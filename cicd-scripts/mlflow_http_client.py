@@ -43,7 +43,7 @@ class HttpClient(object):
 
     def _mk_headers(self):
         header = {"Authorization": "Bearer {}".format(self.token)}
-        return {} if self.token is None else header
+        return header
         
 
     def _mk_uri(self, resource):
