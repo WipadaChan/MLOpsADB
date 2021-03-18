@@ -39,7 +39,7 @@ class HttpClient(object):
         return json.loads(rsp.text)
 
     def _mk_headers(self):
-        header = 'Authorization': 'Bearer {}'.format(self.token)}
+        header = {'Authorization': 'Bearer {}'.format(self.token)}
         return {} if self.token is None else header
         
 
