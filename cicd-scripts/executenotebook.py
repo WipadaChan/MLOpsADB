@@ -86,7 +86,7 @@ def main():
         jsonString = jsonString + '}'
         pyJsonString = json.loads(jsonString)
 
-        values = {'name': name, 'existing_cluster_id': cluster, 'timeout_seconds': 3600, 'notebook_task': {'notebook_path': fullworkspacepath}}
+        values = {"name": name, "existing_cluster_id": cluster, "timeout_seconds": 3600, "notebook_task": {"notebook_path": fullworkspacepath}}
         #values = {'run_name': name, 'existing_cluster_id': cluster, 'timeout_seconds': 3600, 'notebook_task': {'notebook_path': fullworkspacepath}}
         #Create DB Job
         print('Job Create Request URL: '+ shard + '/api/2.0/jobs/create')
@@ -99,7 +99,7 @@ def main():
         jobid = d['job_id']
         #Run Job
         print('Run Request URL: '+ shard + '/api/2.0/jobs/run-now')
-        values={'job_id': jobid,'notebook_params':pyJsonString}
+        values={"job_id": jobid,"notebook_params":pyJsonString}
         print('Run Request Data:' + json.dumps(values))
         resp = requests.post(shard + '/api/2.0/jobs/run-now',
                              data=json.dumps(values), auth=("token", token))
