@@ -42,7 +42,8 @@ class HttpClient(object):
         return json.loads(rsp.text)
 
     def _mk_headers(self):
-        header = {"Authorization": "Bearer {}".format(self.token)}
+        token = get_token()
+        header = {"Authorization": "Bearer {}".format(token)}
         return header
         
 
