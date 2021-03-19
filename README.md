@@ -12,8 +12,10 @@
     - DATABRICKS_TOKEN
     - EXISTING_CLUSTER_ID
     - MODEL_NAME
+To update Azure ML Workspace Config:
+    - Edit in file deploy_azure_ml_model.py
 
-This project demonstrates the use of Azure DevOps as the tool to work with ML Pipelines in Azure Databricks.-
+This project demonstrates the use of Azure DevOps as the tool to work with ML Pipelines in Azure Databricks.
 
 Workflow Steps
 
@@ -26,7 +28,7 @@ Workflow Steps
     - Deploys REST API for he model/image
     - returns an the REST API deployment URL to Azure Dev Ops
 - Azure Dev Ops uploads test notebook from git to a dedicated Test/QA region within the workspace
-- Azure Dev Ops runs deploy notebook with run submit which does the following:
+- Azure Dev Ops runs deploy notebook(same deploy notebook with different parameter) with run submit which does the following:
     - Retrieves test data
     - Invokes REST API
 - If successful, DevOps will deploy the model into production using the mlFlow REST API# databricksMLOpsAzureDemo
