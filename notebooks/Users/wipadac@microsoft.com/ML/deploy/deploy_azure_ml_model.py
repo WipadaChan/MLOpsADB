@@ -131,8 +131,8 @@ if len(img_name)>32:
 
 model_image, azure_model = mlflow.azureml.build_image(model_uri=model_uri, 
                                                       workspace=workspace, 
-                                                      model_name=model_name+"-"+stage,
-                                                      image_name=model_name+"-"+phase+"-image",
+                                                      model_name=ml_name,
+                                                      image_name=img_name,
                                                       description=model_name, 
                                                       tags={
                                                         "alpha": str(latest_sk_model.alpha),
