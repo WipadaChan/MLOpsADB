@@ -20,6 +20,7 @@ dbutils.widgets.text(name = "phase", defaultValue = "qa", label = "Phase")
 model_name = dbutils.widgets.get("model_name")
 stage = dbutils.widgets.get("stage")
 phase=dbutils.widgets.get("phase")
+model_name=model_name.lower()
 
 # COMMAND ----------
 
