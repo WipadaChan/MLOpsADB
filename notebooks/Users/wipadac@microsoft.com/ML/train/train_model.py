@@ -1,28 +1,23 @@
 # Databricks notebook source
-# DBTITLE 1,Uncomment if you do NOT use MLflow Webhooks
-'''
-%pip install azure-devops'''
-
-# COMMAND ----------
-
-#Uncomment if you want to delete the model and start from scratch
-#import mlflow
-#client = mlflow.tracking.MlflowClient()
-# Delete a registered model along with all its versions
-#client.delete_registered_model(name="wine-model-ok")
-
-# COMMAND ----------
-
 # MAGIC %md ### Training a model and adding to the mlFlow registry
 
 # COMMAND ----------
 
-dbutils.widgets.text(name = "model_name", defaultValue = "wine-model-ok", label = "Model Name")
-dbutils.widgets.text(name = "trigger_pipeline", defaultValue = "True", label = "Trigger Pipeline")
+dbutils.widgets.text(name = "model_name", defaultValue = "ml-gov-demo-wine-model", label = "Model Name")
+dbutils.widgets.combobox(name = "trigger_pipeline", defaultValue = "True", choices=["True","False"],label = "Trigger Pipeline")
 
 # COMMAND ----------
 
 model_name=dbutils.widgets.get("model_name")
+model_name=model_name.lower()
+
+# COMMAND ----------
+
+model_name
+
+# COMMAND ----------
+
+model_name.lower()
 
 # COMMAND ----------
 
@@ -51,11 +46,11 @@ mlflow.__version__
 
 # COMMAND ----------
 
-# MAGIC %sh wget https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv
+#%sh wget https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv
 
 # COMMAND ----------
 
-wine_data_path = "/dbfs/wine-quality.csv"
+wine_data_path = "/dbfs/FileStore/tables/winequality_red-42ff5.csv"
 
 # COMMAND ----------
 
@@ -164,14 +159,13 @@ version = result.version
 
 # COMMAND ----------
 
-#Uncomment if you do not use Webhooks or if are are using Webhooks and still want to transition the model automatically
-'''import mlflow
+import mlflow
 client = mlflow.tracking.MlflowClient()
 
 client.transition_model_version_stage(
     name=model_name,
     version=version,
-    stage="staging")'''
+    stage="staging")
 
 # COMMAND ----------
 
@@ -179,28 +173,42 @@ client.transition_model_version_stage(
 
 # COMMAND ----------
 
-# Note, please uncomment in case you are NOT using the MLflow Registry Webhooks functions
-'''from azure.devops.connection import Connection
-from msrest.authentication import BasicAuthentication
-from azure.devops.v6_0.pipelines.models import RunPipelineParameters,Variable
+# MAGIC %pip install azure-devops
 
-# Fill in with your personal access token and org URL
-personal_access_token = dbutils.secrets.get('demo','ado-token')
-organization_url = 'https://dev.azure.com/ML-Governance'
+# COMMAND ----------
 
-# Create a connection to the org
-credentials = BasicAuthentication('', personal_access_token)
-connection = Connection(base_url=organization_url, creds=credentials)
+trigger=dbutils.widgets.get("trigger_pipeline")
+if trigger == "True":
+  from azure.devops.connection import Connection
+  from msrest.authentication import BasicAuthentication
+  from azure.devops.v6_0.pipelines.models import RunPipelineParameters,Variable
 
-# Get a client (the "core" client provides access to projects, teams, etc)
-pipeline_client=connection.clients_v6_0.get_pipelines_client()
+  # Fill in with your personal access token and org URL
 
-#Set the variables for the pipeline
-variable=Variable(value=model_name)
-variables={'model_name':variable}
-run_parameters=RunPipelineParameters(variables=variables)
-print(run_parameters)
+  
+  personal_access_token = dbutils.secrets.get('mlops','mlopsazure2')
+  organization_url = 'https://dev.azure.com/wipadac'
 
-# Run pipeline in MKL Goverance Project V2 with id 6 (ML Goverance V3))
-runPipeline = pipeline_client.run_pipeline(run_parameters=run_parameters,project='ML Governance V2',pipeline_id=6)
-print('Pipeline is triggered. Please check for execution status here: https://dev.azure.com/ML-Governance/ML%20Governance%20V2/_build?definitionId=6&_a=summary')'''
+  # Create a connection to the org
+  credentials = BasicAuthentication('', personal_access_token)
+  connection = Connection(base_url=organization_url, creds=credentials)
+
+  # Get a client (the "core" client provides access to projects, teams, etc)
+  pipeline_client=connection.clients_v6_0.get_pipelines_client()
+
+  #Set the variables for the pipeline
+  variable=Variable(value=model_name)
+  variables={'model_name':variable}
+  run_parameters=RunPipelineParameters(variables=variables)
+  print(run_parameters)
+
+  # Run pipeline in MKL Goverance Project V2 with id 6 (ML Goverance V3))
+  runPipeline = pipeline_client.run_pipeline(run_parameters=run_parameters,project='MLOps Databricks',pipeline_id=11)
+  print('Pipeline is triggered. Please check for execution status here: https://dev.azure.com/ML-Governance/ML%20Governance%20V2/_build?definitionId=6&_a=summary')
+
+# COMMAND ----------
+
+# MAGIC %sh databricks secrets list --scope mlops
+
+# COMMAND ----------
+
