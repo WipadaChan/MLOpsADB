@@ -11,7 +11,7 @@
 
 # COMMAND ----------
 
-dbutils.widgets.text(name = "model_name", defaultValue = "tech-summit-wine-model", label = "Model Name")
+dbutils.widgets.text(name = "model_name", defaultValue = "ADB-AML-wine-model", label = "Model Name")
 dbutils.widgets.text(name = "stage", defaultValue = "staging", label = "Stage")
 dbutils.widgets.text(name = "phase", defaultValue = "qa", label = "Phase")
 
@@ -128,6 +128,7 @@ if len(ml_name)>32:
 
 if len(img_name)>32:
   img_name=img_name[0:32]
+
 
 model_image, azure_model = mlflow.azureml.build_image(model_uri=model_uri, 
                                                       workspace=workspace, 
