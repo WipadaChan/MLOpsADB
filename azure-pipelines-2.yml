@@ -32,7 +32,7 @@ steps:
 - script: git checkout main
   displayName: 'Get Latest Branch'
 
-  - script: |
+- script: |
     databricks workspace import $BUILD_SOURCESDIRECTORY/"notebooks/Users/wipadac@microsoft.com/ML/deploy/deploy_azure_ml_model.py" "/MLOps/deploy_azure_ml_model"  --language PYTHON -o
   displayName: 'Import ML Deploy Notebook'
 - task: PythonScript@0
