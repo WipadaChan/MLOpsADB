@@ -32,7 +32,7 @@ resource_group = "mlops-RG"
 workspace_name = "mlops-AML-WS"                       
 tenant_id = "72f988bf-86f1-41af-91ab-2d7cd011db47" # Tenant ID
 sp_id = "293eaad2-d9fa-4d01-a718-70bccb6f8d82" # Service Principal ID
-sp_secret = dbutils.secrets.get(scope="team1",key="team1_key")# Service Principal Secret
+sp_secret = "yB47Q~YCeqqCpIsobltbmF0qwoHw8SAuLtUTZ"# Service Principal Secret
 
 # COMMAND ----------
 
