@@ -118,7 +118,7 @@ def train_model(wine_data_path, model_path, alpha, l1_ratio):
 
 # COMMAND ----------
 
-alpha_1 = 0.864
+alpha_1 = 0.865
 l1_ratio_1 = 0.785
 model_path = 'model'
 run_id1 = train_model(wine_data_path=wine_data_path, model_path=model_path, alpha=alpha_1, l1_ratio=l1_ratio_1)
