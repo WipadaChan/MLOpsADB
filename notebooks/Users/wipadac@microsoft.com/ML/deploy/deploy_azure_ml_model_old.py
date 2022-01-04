@@ -39,19 +39,38 @@ sp_secret = "yB47Q~YCeqqCpIsobltbmF0qwoHw8SAuLtUTZ" # Service Principal Secret
 import mlflow
 import mlflow.azureml
 #import azureml.mlflow
-import azureml
 import azureml.core
 from azureml.core import Workspace
-from azureml.core import Workspace
-from azureml.core.authentication import InteractiveLoginAuthentication
-from azureml.core.compute import AksCompute, ComputeTarget
-from azureml.core.webservice import AksWebservice
-from random import randint
-
 #from azureml.mlflow import get_portal_url
 
 print("AzureML SDK version:", azureml.core.VERSION)
 print("MLflow version:", mlflow.version.VERSION)
+
+# COMMAND ----------
+
+from azureml.core.authentication import ServicePrincipalAuthentication
+def service_principal_auth():
+  return ServicePrincipalAuthentication(
+      tenant_id=tenant_id,
+      service_principal_id=sp_id,
+      service_principal_password=sp_secret)
+
+# COMMAND ----------
+
+def azureml_workspace(auth_type='interactive'):
+  if auth_type == 'interactive':
+    auth = interactive_auth()
+  elif auth_type == 'service_princpal':
+    auth = service_principal_auth()
+    
+  ws = Workspace.create(name = workspace_name,
+                       resource_group = resource_group,
+                       subscription_id = subscription_id,
+                       exist_ok=True,
+                       auth=auth)
+  return ws
+
+# COMMAND ----------
 
 # MAGIC %md ### Get the latest version of the model that was put into Staging
 
@@ -79,33 +98,11 @@ latest_sk_model = mlflow.sklearn.load_model(model_uri)
 
 # COMMAND ----------
 
-from azureml.core.authentication import ServicePrincipalAuthentication
-from azureml.core.compute import AksCompute, ComputeTarget
+import azureml
+from azureml.core import Workspace
 
-tenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47"
-clientId =  "293eaad2-d9fa-4d01-a718-70bccb6f8d82"
-clientSecret = "yB47Q~YCeqqCpIsobltbmF0qwoHw8SAuLtUTZ" 
+workspace = azureml_workspace(auth_type = 'service_princpal') # If you don't have a service principal, use 'interactive' for interactive login
 
-sp = ServicePrincipalAuthentication(
-    tenant_id=tenantId,
-    service_principal_id=clientId,
-    service_principal_password=clientSecret,
-)
-
-subscription_id = "4914f262-bda8-46cc-a9db-c9cbd694b117"
-resource_group = "mlops-RG"                   
-workspace_name = "mlops-AML-WS"      
-workspace_region = "southeastasia"
-aks_compute_name = "wcpnewaks"
-
-workspace = Workspace.get(
-    name=workspace_name,
-    location=workspace_region,
-    resource_group=resource_group,
-    subscription_id=subscription_id,
-    auth=sp,
-)
-aks_target = AksCompute(workspace,aks_compute_name)
 # COMMAND ----------
 
 # MAGIC %md ## Building an Azure Container Image for model deployment
@@ -125,26 +122,24 @@ print(phase)
 import mlflow.azureml
 
 ml_name = model_name+"-"+stage
+img_name = model_name+"-"+phase+"-image"
 
 if len(ml_name)>32:
   ml_name=ml_name[0:32]
 
-aks_deploy_config = AksWebservice.deploy_configuration(
-    compute_target_name=aks_compute_name,
-    cpu_cores=1,
-    memory_gb=1,
-    tags={"data": "wine sample", "method": "linear","alpha": str(latest_sk_model.alpha),"l1_ratio": str(latest_sk_model.l1_ratio)},
-    description="Sample linear model using wine data",
-)
+if len(img_name)>32:
+  img_name=img_name[0:32]
 
-# Note: This will create seperate service eveytime you execute, keep service_name same to update existing deployment
-webservice, azure_model = mlflow.azureml.deploy(
-    model_uri=model_uri,
-    workspace=workspace,
-    deployment_config=aks_deploy_config,
-    service_name=ml_name + str(randint(10000, 99999)), 
-    model_name=model_name,
-    synchronous=False)                                                      
+model_image, azure_model = mlflow.azureml.build_image(model_uri=model_uri, 
+                                                      workspace=workspace, 
+                                                      model_name=ml_name,
+                                                      image_name=img_name,
+                                                      description=model_name, 
+                                                      tags={
+                                                        "alpha": str(latest_sk_model.alpha),
+                                                        "l1_ratio": str(latest_sk_model.l1_ratio),
+                                                      },
+                                                      synchronous=True)
 
 # COMMAND ----------
 
@@ -152,14 +147,19 @@ webservice, azure_model = mlflow.azureml.deploy(
 
 # COMMAND ----------
 
+import azureml
+from azureml.core.webservice import AciWebservice, Webservice
+dev_webservice_name = model_name+"-"+phase # make sure this name is unique and doesnt already exist, else need to replace
+dev_webservice_deployment_config = AciWebservice.deploy_configuration()
+dev_webservice = Webservice.deploy_from_image(name=dev_webservice_name, image=model_image, deployment_config=dev_webservice_deployment_config, workspace=workspace,overwrite=True)
+
 # COMMAND ----------
 
-webservice.wait_for_deployment(show_output=True)
-webservice.scoring_uri
+dev_webservice.wait_for_deployment()
 
 # COMMAND ----------
 
-dev_scoring_uri = webservice.scoring_uri
+dev_scoring_uri = dev_webservice.scoring_uri
 
 # COMMAND ----------
 
