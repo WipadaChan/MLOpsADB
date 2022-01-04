@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install azureml-sdk==1.27.*
+# MAGIC %pip install azureml-sdk
 
 # COMMAND ----------
 
