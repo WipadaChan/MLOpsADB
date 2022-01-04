@@ -13,11 +13,12 @@ model_name=model_name.lower()
 
 # COMMAND ----------
 
-model_name
+# MAGIC %pip install azureml-sdk[databricks]
+# MAGIC %pip install azureml-mlflow
 
 # COMMAND ----------
 
-model_name.lower()
+model_name
 
 # COMMAND ----------
 
@@ -26,13 +27,6 @@ model_name.lower()
 # MAGIC MLflow can collect data about a model training session, such as validation accuracy. It can also save artifacts produced during the training session, such as a PySpark pipeline model.
 # MAGIC 
 # MAGIC By default, these data and artifacts are stored on the cluster's local filesystem. However, they can also be stored remotely using an [MLflow Tracking Server](https://mlflow.org/docs/latest/tracking.html).
-
-# COMMAND ----------
-
-import mlflow
-mlflow.__version__
-
-# Using the hosted mlflow tracking server
 
 # COMMAND ----------
 
@@ -72,7 +66,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import ElasticNet
 
-import mlflow
+#import mlflow
 import mlflow.sklearn
 
 
@@ -138,6 +132,11 @@ model_uri = "runs:/"+run_id1+"/model"
 # COMMAND ----------
 
 print(model_uri)
+
+# COMMAND ----------
+
+webservice.wait_for_deployment(show_output=True)
+webservice.scoring_uri
 
 # COMMAND ----------
 
