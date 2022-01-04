@@ -13,11 +13,6 @@ model_name=model_name.lower()
 
 # COMMAND ----------
 
-# MAGIC %pip install azureml-sdk[databricks]
-# MAGIC %pip install azureml-mlflow
-
-# COMMAND ----------
-
 model_name
 
 # COMMAND ----------
@@ -132,11 +127,6 @@ model_uri = "runs:/"+run_id1+"/model"
 # COMMAND ----------
 
 print(model_uri)
-
-# COMMAND ----------
-
-webservice.wait_for_deployment(show_output=True)
-webservice.scoring_uri
 
 # COMMAND ----------
 
