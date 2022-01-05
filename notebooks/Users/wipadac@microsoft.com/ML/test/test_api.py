@@ -55,10 +55,10 @@ def query_endpoint_example(scoring_uri, inputs, service_key=None):
 # COMMAND ----------
 import json
 plaintxt = dbutils.widgets.get("scoring_uri")
-result = json.loads(plaintxt)
-# COMMAND ----------
 print(plaintxt)
+# COMMAND ----------
 
+result = json.loads(plaintxt)
 # COMMAND ----------
 scoring_uri=result['uri']
 key=result['key']
