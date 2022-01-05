@@ -165,7 +165,7 @@ primary, secondary = webservice.get_keys()
 # COMMAND ----------
 
 print(dev_scoring_uri)
-newrest = "uri_" + dev_scoring_uri + "|"+ "key_"+ primary
+newrest = "uri-" + dev_scoring_uri + "|"+ "key-"+ primary
 # COMMAND ----------
 
 import json
