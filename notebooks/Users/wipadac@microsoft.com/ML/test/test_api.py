@@ -53,12 +53,14 @@ def query_endpoint_example(scoring_uri, inputs, service_key=None):
   return preds
 
 # COMMAND ----------
+import json
+result = json.loads(dbutils.widgets.get("scoring_uri"))
 
-scoring_uri = dbutils.widgets.get("scoring_uri")
-
+scoring_uri=result['uri']
+key=result['key']
 # COMMAND ----------
 
-prediction = query_endpoint_example(scoring_uri=scoring_uri, inputs=sample_json)
+prediction = query_endpoint_example(scoring_uri=scoring_uri, inputs=sample_json, service_key=key)
 
 # COMMAND ----------
 

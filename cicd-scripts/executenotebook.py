@@ -118,7 +118,7 @@ def main():
             current_state = j['state']['life_cycle_state']
             runid = j['run_id']
             if current_state in ['INTERNAL_ERROR', 'SKIPPED']:
-                sys.exit("Notebook run did not compleye. Status is "+current_state)
+                sys.exit("Notebook run did not complete. Status is "+current_state)
                 break
             else: 
                 if current_state in ['TERMINATED']:

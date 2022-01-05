@@ -160,6 +160,7 @@ webservice.scoring_uri
 # COMMAND ----------
 
 dev_scoring_uri = webservice.scoring_uri
+primary, secondary = webservice.get_keys()
 
 # COMMAND ----------
 
@@ -167,4 +168,8 @@ print(dev_scoring_uri)
 
 # COMMAND ----------
 
-dbutils.notebook.exit(dev_scoring_uri)
+import json
+dbutils.notebook.exit(json.dumps({
+  "uri": dev_scoring_uri,
+  "key": primary
+}))
