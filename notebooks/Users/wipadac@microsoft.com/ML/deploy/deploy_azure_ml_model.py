@@ -96,7 +96,7 @@ subscription_id = "4914f262-bda8-46cc-a9db-c9cbd694b117"
 resource_group = "mlops-RG"                   
 workspace_name = "mlops-AML-WS"      
 workspace_region = "southeastasia"
-aks_compute_name = "wcpnewaks"
+aks_compute_name = "AKSWCP"
 
 workspace = Workspace.get(
     name=workspace_name,
