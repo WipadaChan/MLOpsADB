@@ -58,7 +58,7 @@ plaintxt = dbutils.widgets.get("scoring_uri")
 print(plaintxt)
 # COMMAND ----------
 
-result = json.loads(plaintxt)
+result = dict(sub.split('=') for sub in newrest.split('|'))
 # COMMAND ----------
 scoring_uri=result['uri']
 key=result['key']

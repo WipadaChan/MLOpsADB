@@ -165,11 +165,8 @@ primary, secondary = webservice.get_keys()
 # COMMAND ----------
 
 print(dev_scoring_uri)
-
+newrest = "uri=" + dev_scoring_uri + "|"+ "key="+ primary
 # COMMAND ----------
 
 import json
-dbutils.notebook.exit(json.dumps({
-  "uri": dev_scoring_uri,
-  "key": primary
-}))
+dbutils.notebook.exit(newrest)
