@@ -58,6 +58,7 @@ result = json.loads(dbutils.widgets.get("scoring_uri"))
 
 scoring_uri=result["uri"]
 key=result["key"]
+print(result)
 # COMMAND ----------
 
 prediction = query_endpoint_example(scoring_uri=scoring_uri, inputs=sample_json, service_key=key)

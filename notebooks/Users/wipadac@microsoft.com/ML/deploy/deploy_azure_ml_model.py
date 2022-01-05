@@ -169,7 +169,7 @@ print(dev_scoring_uri)
 # COMMAND ----------
 
 import json
-dbutils.notebook.exit(json.dumps({
+dbutils.notebook.exit(json.dump({
   "uri": dev_scoring_uri,
   "key": primary
 }))
