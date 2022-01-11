@@ -27,12 +27,12 @@ model_name=model_name.lower()
 # Config for AzureML Workspace
 # for secure keeping, store credentials in Azure Key Vault and link using Azure Databricks secrets with dbutils
 #subscription_id = dbutils.secrets.get(scope = "common-sp", key ="az-sub-id")
-subscription_id = "4914f262-bda8-46cc-a9db-c9cbd694b117"
+subscription_id = "XXXXX"
 resource_group = "mlops-RG"                   
 workspace_name = "mlops-AML-WS"                       
-tenant_id = "72f988bf-86f1-41af-91ab-2d7cd011db47" # Tenant ID
-sp_id = "293eaad2-d9fa-4d01-a718-70bccb6f8d82" # Service Principal ID
-sp_secret = "yB47Q~YCeqqCpIsobltbmF0qwoHw8SAuLtUTZ"# Service Principal Secret
+tenant_id = "XXXXX" # Tenant ID
+sp_id = "XXXXX" # Service Principal ID
+sp_secret = "XXXXXXX"# Service Principal Secret
 
 # COMMAND ----------
 
